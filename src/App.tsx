@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Score from "./views/ScoreScreen";
 import Welcome from "./views/WelcomeScreen";
+import Game from "./views/GameScreen";
 
 type Screen = 'menu' | 'game' | 'score';
 type GameMode = 'single' | 'all';
@@ -16,6 +17,12 @@ function App() {
         setScreen('game');
     }
 
+    const handleFinish = (score: number, total: number) => {
+        setFinalScore(score);
+        setTotalQuestions(total);
+        setScreen('score');
+    };
+
     const backToMenu = () => {
         setScreen('menu');
     };
@@ -27,7 +34,7 @@ function App() {
                     <Welcome onStart={startGame} />
                 )}
                 {screen === 'game' && (
-                    <div className="text-center">Game Screen (Coming Soon)</div>
+                    <Game mode={mode} onFinish={handleFinish} />
                 )}
                 {screen === 'score' && (
                     <Score score={finalScore} total={totalQuestions} onRestart={() => startGame(mode)} onMenu={backToMenu}/>
