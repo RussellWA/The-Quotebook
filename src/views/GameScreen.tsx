@@ -23,7 +23,7 @@ export default function Game({ mode, onFinish }: GameProps) {
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
-                const res = await fetch('http://localhost:8080/api/quiz/start', {
+                const res = await fetch('https://quotebook-be.vercel.app/api/quiz/start', {
                     method: 'POST'
                 });
 
@@ -54,7 +54,7 @@ export default function Game({ mode, onFinish }: GameProps) {
 
         const currQuestion = questions[currentIndex];
 
-        const res = await fetch('http://localhost:8080/api/quiz/answer', {
+        const res = await fetch('https://quotebook-be.vercel.app/api/quiz/answer', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ question_id: currQuestion.id, answer: selectedOption })

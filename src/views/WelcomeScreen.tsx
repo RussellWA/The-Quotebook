@@ -14,7 +14,7 @@ export default function Welcome({ onStart }: WelcomeProps) {
         setIsRefreshing(true);
 
         try {
-            const res = await fetch('http://localhost:8080/api/quiz/refresh', {
+            const res = await fetch('https://quotebook-be.vercel.app/api/quiz/refresh', {
                 method: 'POST' 
             });
 
