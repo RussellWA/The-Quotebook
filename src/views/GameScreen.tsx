@@ -16,20 +16,18 @@ export default function Game({ mode, onFinish }: GameProps) {
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const [score, setScore] = useState(0);
 
-    const [isSubmitting, setIsSubmitting] = useState(false); // API loading state
-    const [isAnswered, setIsAnswered] = useState(false);     // Did we check the answer?
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isAnswered, setIsAnswered] = useState(false);
     const [feedback, setFeedback] = useState<{ text: string, isCorrect: boolean } | null>(null);
     
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
-                const res = await fetch('https://quotebook-be.vercel.app/api/quiz/start', {
-                    method: 'POST'
+                const res = await fetch('https://quotebook-be.vercel.app/api/startquiz', {
+                    method: 'GET'
                 });
 
-                const result = await res.json();
-
-                const data = result.questions;
+                const data: Question[] = await res.json();
 
                 if (mode === 'single') {
                     const random = data[Math.floor(Math.random() * data.length)];
@@ -54,7 +52,7 @@ export default function Game({ mode, onFinish }: GameProps) {
 
         const currQuestion = questions[currentIndex];
 
-        const res = await fetch('https://quotebook-be.vercel.app/api/quiz/answer', {
+        const res = await fetch('https://quotebook-be.vercel.app/api/answer', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ question_id: currQuestion.id, answer: selectedOption })
@@ -132,6 +130,7 @@ export default function Game({ mode, onFinish }: GameProps) {
                         checked={selectedOption === option}
                         onChange={() => !isSubmitting && setSelectedOption(option)}
                         className="sr-only"
+                        disabled={isAnswered}
                     />
                     
                     <div className={`w-6 h-6 rounded-full border-2 mr-4 flex items-center justify-center
