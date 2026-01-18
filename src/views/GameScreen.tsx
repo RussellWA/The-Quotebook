@@ -18,7 +18,7 @@ export default function Game({ mode, onFinish }: GameProps) {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isAnswered, setIsAnswered] = useState(false);
-    const [feedback, setFeedback] = useState<{ text: string, isCorrect: boolean } | null>(null);
+    const [feedback, setFeedback] = useState<{ text: string, isCorrect: boolean, correctAnswer: string } | null>(null);
     
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -66,7 +66,8 @@ export default function Game({ mode, onFinish }: GameProps) {
 
         setFeedback({
             text: result.correct ? "✅ Correct!" : "❌ Incorrect",
-            isCorrect: result.correct
+            isCorrect: result.correct,
+            correctAnswer: result.correct_answer
         });
         setIsAnswered(true);
         setIsSubmitting(false);
@@ -147,8 +148,16 @@ export default function Game({ mode, onFinish }: GameProps) {
             </div>
 
             {isAnswered && feedback && (
-                <div className={`text-center text-2xl font-bold animate-bounce ${feedback.isCorrect ? 'text-green-400' : 'text-red-400'}`}>
-                    {feedback.text}
+                <div className="flex flex-col items-center space-y-2 mb-4">
+                    <div className={`text-2xl font-bold animate-bounce ${feedback.isCorrect ? 'text-green-400' : 'text-red-400'}`}>
+                        {feedback.text}
+                    </div>
+                    
+                    {!feedback.isCorrect && feedback.correctAnswer && (
+                        <div className="text-slate-300 text-lg bg-slate-900/50 px-4 py-2 rounded-lg border border-slate-700">
+                            The correct answer was: <span className="text-blue-400 font-bold ml-1">{feedback.correctAnswer}</span>
+                        </div>
+                    )}
                 </div>
             )}
 
